@@ -34,12 +34,12 @@ public class SettingsActivity extends AppCompatActivity implements Switch.OnChec
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 onBackPressed();
             }
         });
 
         sharedPreferences = getSharedPreferences(StaticData.PREF_NAME, MODE_PRIVATE);
-        setResult(RESULT_OK);
 
         startAnimation = findViewById(R.id.enable_start_animation);
         flipAnimation = findViewById(R.id.enable_flip_animation);

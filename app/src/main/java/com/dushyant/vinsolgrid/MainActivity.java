@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
 
         recyclerView.setLayoutManager(gridLayoutManager);
-//        if (sharedPreferences.getBoolean(StaticData.ENABLE_ITEMS_ANIMATION, true))
-//            recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        else
-        recyclerView.setItemAnimator(null);
+        if (sharedPreferences.getBoolean(StaticData.ENABLE_ITEMS_ANIMATION, true))
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+        else
+            recyclerView.setItemAnimator(null);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(gridRecyclerAdapter);
 

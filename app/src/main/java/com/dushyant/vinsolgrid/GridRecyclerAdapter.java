@@ -51,6 +51,14 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
+        int spacing = context.getSharedPreferences(StaticData.PREF_NAME, Context.MODE_PRIVATE)
+                .getInt(StaticData.GRID_SPACING, StaticData.DEFAULT_SPACING);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(spacing, spacing, spacing, spacing);
+        holder.cardView.setLayoutParams(layoutParams);
+
         holder.textView.setText(Html.fromHtml(String.format("%s", numberWordsList.get(position))));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.cardView.setElevation(4);
@@ -63,18 +71,23 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
                     holder.cardView.setElevation(0);
                 }
 
-                AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.flip_animation);
-                set.setTarget(holder.cardView);
-                set.setDuration(1000);
-                set.start();
+                if (context.getSharedPreferences(StaticData.PREF_NAME, Context.MODE_PRIVATE)
+                        .getBoolean(StaticData.ENABLE_FLIP_ANIMATION, true)) {
+                    AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.flip_animation);
+                    set.setTarget(holder.cardView);
+                    set.setDuration(context.getSharedPreferences(StaticData.PREF_NAME, Context.MODE_PRIVATE)
+                            .getInt(StaticData.FLIP_ANIM_TIME, StaticData.DEFAULT_FLIP_DURATION));
+                    set.start();
 
-                set.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        removeItem(holder.getAdapterPosition());
-                    }
-                });
+                    set.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            removeItem(holder.getAdapterPosition());
+                        }
+                    });
+                } else
+                    removeItem(holder.getAdapterPosition());
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.dushyant.vinsolgrid;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,9 +13,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.GridLayoutAnimationController;
 import android.view.animation.LayoutAnimationController;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -21,12 +21,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private GridView gridView;
+    //    private GridView gridView;
 //    private GridAdapter gridAdapter;
     private List<String> numberWordsList;
     private RecyclerView recyclerView;
     private ImageView settings;
-    private static final int sColumnWidth = 100;
+
+    private SharedPreferences sharedPreferences;
+    private static final int DATA_CHANGE_REQUEST = 101;
+
+    private int columnWidth = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle("Home");
+
+        sharedPreferences = getSharedPreferences(StaticData.PREF_NAME, MODE_PRIVATE);
 
         numberWordsList = new ArrayList<>();
 
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), DATA_CHANGE_REQUEST);
             }
         });
 
@@ -77,13 +83,19 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
 
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (sharedPreferences.getBoolean(StaticData.ENABLE_ITEMS_ANIMATION, true))
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(gridRecyclerAdapter);
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.grid_item_anim);
-        LayoutAnimationController controller = new LayoutAnimationController(animation, .2f);
-        recyclerView.setLayoutAnimation(controller);
+        columnWidth = sharedPreferences.getInt(StaticData.COLUMN_WIDTH, StaticData.DEFAULT_WIDTH);
+
+        if (sharedPreferences.getBoolean(StaticData.ENABLE_START_ANIMATION, true)) {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.grid_item_anim);
+            LayoutAnimationController controller = new LayoutAnimationController(animation, .2f);
+            animation.setDuration(sharedPreferences.getInt(StaticData.START_ANIM_TIME, StaticData.DEFAULT_START_DURATION));
+            recyclerView.setLayoutAnimation(controller);
+        }
 
         ViewTreeObserver viewTreeObserver = recyclerView.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -95,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculateSize() {
-        int spanCount = (int) Math.floor(recyclerView.getWidth() / convertDPToPixels(sColumnWidth));
+        int spanCount = (int) Math.floor(recyclerView.getWidth() / convertDPToPixels(columnWidth));
         ((GridLayoutManager) recyclerView.getLayoutManager()).setSpanCount(spanCount);
     }
 
@@ -107,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        recreate();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DATA_CHANGE_REQUEST && resultCode == RESULT_OK) {
+            recreate();
+        }
     }
 }

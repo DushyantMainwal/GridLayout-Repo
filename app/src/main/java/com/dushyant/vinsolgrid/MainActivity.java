@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,17 +79,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        columnWidth = sharedPreferences.getInt(StaticData.COLUMN_WIDTH, StaticData.DEFAULT_WIDTH);
+
         GridRecyclerAdapter gridRecyclerAdapter = new GridRecyclerAdapter(this, numberWordsList);
         recyclerView = findViewById(R.id.recycler_View);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
 
         recyclerView.setLayoutManager(gridLayoutManager);
-        if (sharedPreferences.getBoolean(StaticData.ENABLE_ITEMS_ANIMATION, true))
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        if (sharedPreferences.getBoolean(StaticData.ENABLE_ITEMS_ANIMATION, true))
+//            recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        else
+        recyclerView.setItemAnimator(null);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(gridRecyclerAdapter);
-
-        columnWidth = sharedPreferences.getInt(StaticData.COLUMN_WIDTH, StaticData.DEFAULT_WIDTH);
 
         if (sharedPreferences.getBoolean(StaticData.ENABLE_START_ANIMATION, true)) {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.grid_item_anim);

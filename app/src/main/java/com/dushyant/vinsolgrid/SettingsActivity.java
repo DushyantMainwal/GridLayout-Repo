@@ -39,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity implements Switch.OnChec
         });
 
         sharedPreferences = getSharedPreferences(StaticData.PREF_NAME, MODE_PRIVATE);
+        setResult(RESULT_OK);
 
         startAnimation = findViewById(R.id.enable_start_animation);
         flipAnimation = findViewById(R.id.enable_flip_animation);
@@ -158,6 +159,5 @@ public class SettingsActivity extends AppCompatActivity implements Switch.OnChec
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setResult(RESULT_OK);
     }
 }

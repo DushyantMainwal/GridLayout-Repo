@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +54,16 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
         int spacing = context.getSharedPreferences(StaticData.PREF_NAME, Context.MODE_PRIVATE)
                 .getInt(StaticData.GRID_SPACING, StaticData.DEFAULT_SPACING);
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                spacing,
+                context.getResources().getDisplayMetrics()
+        );
+
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(spacing, spacing, spacing, spacing);
+        layoutParams.setMargins(px, px, px, px);
         holder.cardView.setLayoutParams(layoutParams);
 
         holder.textView.setText(Html.fromHtml(String.format("%s", numberWordsList.get(position))));

@@ -14,7 +14,6 @@ public class StaticData {
     public static final String COLUMN_WIDTH = "column_width";
     public static final String GRID_SPACING = "grid_spacing";
 
-
     public static final int DEFAULT_START_DURATION = 400;
     public static final int DEFAULT_FLIP_DURATION = 1000;
     public static final int DEFAULT_WIDTH = 100;

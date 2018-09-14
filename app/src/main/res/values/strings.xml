@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Vinsol Grid</string>
+    <string name="one">One</string>
+    <string name="enable_start_animation">Enable Start Animation</string>
+    <string name="start_animation_time">Start Animation Time</string>
+    <string name="enable_flip_animation">Enable Flip Animation</string>
+    <string name="flip_animation_time">Flip Animation Time</string>
+    <string name="enable_items_animation">Enable Items Animation</string>
+    <string name="column_width_of_grid">Column Width Of Grid</string>
+    <string name="spacing">Spacing</string>
+
+
+    <string-array name="number_words">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+        <item>Twelve</item>
+        <item>Thirteen</item>
+        <item>Fourteen</item>
+        <item>Fifteen</item>
+        <item>Sixteen</item>
+        <item>Seventeen</item>
+        <item>Eighteen</item>
+        <item>Nineteen</item>
+        <item>Twenty</item>
+    </string-array>
+
+</resources>
